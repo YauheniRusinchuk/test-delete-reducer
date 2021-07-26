@@ -1,23 +1,31 @@
+import React, { useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { fetchRequest, deletePost } from './actions';
+import { useDispatch, useSelector } from 'react-redux'
+import { getByTitle } from '@testing-library/react';
 
 function App() {
+
+  const dispatch = useDispatch();
+  const posts = useSelector(state => state.ReducerPosts.posts)
+
+
+  useEffect(() => {
+    dispatch(fetchRequest());
+  }, [])
+
+  const handleClickDelete = (id) => {
+    dispatch(deletePost(id))
+  }
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>HELLO REACT AND REDUX</h1>
+      {posts && posts.map((item) => {
+        return <div key={item.id}>{item.id} - {item.title} <button onClick={() => handleClickDelete(item.id)}>УДАЛИТЬ</button></div>
+      })}
     </div>
   );
 }
